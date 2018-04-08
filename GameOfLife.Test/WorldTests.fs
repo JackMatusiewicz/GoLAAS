@@ -78,3 +78,21 @@ module WorldTests =
 
             cellsGiveExpectedResult aliveCells data Alive
             cellsGiveExpectedResult deadCells data Dead
+
+    [<Test>]
+    let ``Given a world, when a tick occurs, then the blinker is updated`` () =
+        let aliveCells =
+            [
+                (1,1)
+                (2,1)
+                (3,1)
+            ] |> Set.ofList
+        let dimensions = (4u, 4u)
+        let (Some world) = World.make dimensions aliveCells
+        let newWorld = World.tick world
+        let updatedCells =
+            World.cellStatuses newWorld
+            |> Map.toList
+            |> List.filter (fun (_,s) -> s = Alive)
+            |> List.map fst
+        Assert.That (updatedCells, Is.EqualTo([(2,0); (2,1); (2,2)]))

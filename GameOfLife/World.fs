@@ -47,3 +47,65 @@ module World =
 
             {World = world; Dimensions = (w,h)}
             |> Some
+
+    let private cellStatus (world : World) (c : Coordinate) : CellStatus option =
+        let data = cellStatuses world
+        match Map.containsKey c data with
+        | true ->
+            data
+            |> Map.find c
+            |> Some
+        | false -> None
+
+    let private getAdjacentCells (world : World) (c : Coordinate) : Set<Coordinate> =
+        let (x,y) = c
+        let cells = cellStatuses world
+        let directions =
+            [-1; 0; 1]
+            |> List.map Tuple.make
+            |> ListExt.apply [-1; 0; 1]
+            |> List.filter ((<>) (0,0))
+
+        directions
+        |> List.map (fun (a,b) -> (x + a, y + b))
+        |> List.filter (fun k -> Map.containsKey k cells)
+        |> Set.ofList
+
+    let private tickCell (world : World) (c : Coordinate) : Coordinate * CellStatus =
+        let cellAliveLogic (c : Coordinate) (neighbours : CellStatus seq) =
+            neighbours
+            |> Seq.filter ((=) Alive)
+            |> Seq.length
+            |> (fun count -> count = 2 || count = 3)
+            |> (fun alive -> if alive then Alive else Dead)
+
+        let cellDeadLogic (c : Coordinate) (neighbours : CellStatus seq) =
+            neighbours
+            |> Seq.filter ((=) Alive)
+            |> Seq.length
+            |> (fun count -> count = 3)
+            |> (fun alive -> if alive then Alive else Dead)
+
+        let neighbours =
+            c
+            |> getAdjacentCells world
+            |> Seq.choose (cellStatus world)
+
+        match cellStatus world c with
+        | None -> failwith "This should never happen"
+        | (Some Alive) ->
+            cellAliveLogic c neighbours
+        | (Some Dead) ->
+            cellDeadLogic c neighbours
+        |> (fun state -> c,state)
+
+    let tick (world : World) : World =
+        let cells = cellStatuses world
+        let dims = dimensions world
+ 
+        cells
+        |> Map.toArray
+        |> Array.map fst
+        |> Array.Parallel.map (tickCell world)
+        |> Map.ofArray
+        |> (fun d -> {World = d; Dimensions = dims})
