@@ -4,7 +4,6 @@ open GameOfLife
 open NUnit.Framework
 
 module WorldTests =
-    open System.Runtime.Remoting.Services
 
     [<Test>]
     let ``Given live cells with negative coordinates, when world is create, then none is returned`` () =
