@@ -65,7 +65,7 @@ module WorldTests =
             Assert.Fail "Should exist"
         | Some w ->
             let dims = World.dimensions w
-            let data = World.cellStatuses w
+            let data = World.cells w
             let cells =
                 data
                 |> Map.toList
@@ -91,7 +91,7 @@ module WorldTests =
         let (Some world) = World.make dimensions aliveCells
         let newWorld = World.tick world
         let updatedCells =
-            World.cellStatuses newWorld
+            World.cells newWorld
             |> Map.toList
             |> List.filter (fun (_,s) -> s = Alive)
             |> List.map fst

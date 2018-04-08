@@ -16,7 +16,7 @@ type World = private {
 [<CompilationRepresentation (CompilationRepresentationFlags.ModuleSuffix)>]
 module World =
 
-    let cellStatuses world = world.World
+    let cells world = world.World
     let dimensions world = world.Dimensions
 
     ///World goes from (0,0) to (width - 1, height - 1)
@@ -49,7 +49,7 @@ module World =
             |> Some
 
     let private cellStatus (world : World) (c : Coordinate) : CellStatus option =
-        let data = cellStatuses world
+        let data = cells world
         match Map.containsKey c data with
         | true ->
             data
@@ -59,7 +59,7 @@ module World =
 
     let private getAdjacentCells (world : World) (c : Coordinate) : Set<Coordinate> =
         let (x,y) = c
-        let cells = cellStatuses world
+        let cells = cells world
         let directions =
             [-1; 0; 1]
             |> List.map Tuple.make
@@ -98,7 +98,7 @@ module World =
         |> (fun state -> c,state)
 
     let tick (world : World) : World =
-        let cells = cellStatuses world
+        let cells = cells world
         let dims = dimensions world
  
         cells
