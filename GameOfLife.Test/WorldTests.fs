@@ -4,6 +4,7 @@ open GameOfLife
 open NUnit.Framework
 
 module WorldTests =
+    open System.Runtime.Remoting.Services
 
     [<Test>]
     let ``Given live cells with negative coordinates, when world is create, then none is returned`` () =
@@ -34,3 +35,45 @@ module WorldTests =
 
         let world = World.make dimensions aliveCells
         Assert.That(world, Is.EqualTo(None))
+
+    [<Test>]
+    let ``Given live cells with valid coordinates, when world is create, then valid world is returned`` () =
+        let aliveCells =
+            [
+                (0, 0)
+                (5,10)
+                (15,20)
+                (0,0)
+                (20,20)
+            ] |> Set.ofList
+        let dimensions = (21u, 21u)
+
+        let world = World.make dimensions aliveCells
+        match world with
+        | None ->
+            Assert.Fail "Should exist"
+        | Some w ->
+            let dims = World.getDimensions w
+            let data = World.getWorld w
+            let cells =
+                data
+                |> Map.toList
+                |> List.map fst
+                |> Set.ofList
+            Assert.That(dims, Is.EqualTo((21u, 21u)))
+            Assert.That(Set.isProperSubset aliveCells cells, Is.True)
+
+            let aliveCells = Set.intersect aliveCells cells
+            let deadCells = Set.difference aliveCells cells
+
+            aliveCells
+            |> Seq.map (fun k -> Map.find k data)
+            |> Seq.map ((=) Alive)
+            |> Seq.fold (&&) true
+            |> Assert.True
+
+            deadCells
+            |> Seq.map (fun k -> Map.find k data)
+            |> Seq.map ((=) Dead)
+            |> Seq.fold (&&) true
+            |> Assert.True

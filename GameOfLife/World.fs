@@ -23,8 +23,8 @@ module World =
     let make ((w,h) : (Width * Height)) (liveCells : Set<Coordinate>) : World option =
 
         let isValidWorldCoordinate ((x,y) : Coordinate) =
-            (x < 0 || (uint32 x) >= w)
-            && (y < 0 || (uint32 y) >= h)
+            not ((x < 0 || (uint32 x) >= w)
+            || (y < 0 || (uint32 y) >= h))
 
         let cellStatus c =
             match Set.contains c liveCells with
