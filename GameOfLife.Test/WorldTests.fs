@@ -37,6 +37,18 @@ module WorldTests =
 
     [<Test>]
     let ``Given live cells with valid coordinates, when world is create, then valid world is returned`` () =
+
+        let cellsGiveExpectedResult
+            (cells : Coordinate seq)
+            (data : Map<Coordinate, CellStatus>)
+            (expected : CellStatus)
+            =
+            cells
+            |> Seq.map (fun k -> Map.find k data)
+            |> Seq.map ((=) expected)
+            |> Seq.fold (&&) true
+            |> Assert.True
+
         let aliveCells =
             [
                 (0, 0)
@@ -60,19 +72,9 @@ module WorldTests =
                 |> List.map fst
                 |> Set.ofList
             Assert.That(dims, Is.EqualTo((21u, 21u)))
-            Assert.That(Set.isProperSubset aliveCells cells, Is.True)
 
             let aliveCells = Set.intersect aliveCells cells
             let deadCells = Set.difference aliveCells cells
 
-            aliveCells
-            |> Seq.map (fun k -> Map.find k data)
-            |> Seq.map ((=) Alive)
-            |> Seq.fold (&&) true
-            |> Assert.True
-
-            deadCells
-            |> Seq.map (fun k -> Map.find k data)
-            |> Seq.map ((=) Dead)
-            |> Seq.fold (&&) true
-            |> Assert.True
+            cellsGiveExpectedResult aliveCells data Alive
+            cellsGiveExpectedResult deadCells data Dead
