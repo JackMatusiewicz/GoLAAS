@@ -20,7 +20,7 @@ module World =
     let getDimensions world = world.Dimensions
 
     ///World goes from [0 -> width - 1] and [0 -> height - 1]
-    let create ((w,h) : (Width * Height)) (liveCells : Set<Coordinate>) : World option =
+    let make ((w,h) : (Width * Height)) (liveCells : Set<Coordinate>) : World option =
 
         let isValidWorldCoordinate ((x,y) : Coordinate) =
             (x < 0 || (uint32 x) >= w)
