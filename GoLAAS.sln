@@ -7,6 +7,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "GoLAAS", "GoLAAS\GoLAAS.fsp
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "GameOfLife", "GameOfLife\GameOfLife.fsproj", "{77C5DC15-40D9-4F2C-833A-A20BD8B3C247}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "GameOfLife.Test", "GameOfLife.Test\GameOfLife.Test.fsproj", "{78637F8C-E682-496B-9C53-6518E122A851}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{77C5DC15-40D9-4F2C-833A-A20BD8B3C247}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77C5DC15-40D9-4F2C-833A-A20BD8B3C247}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77C5DC15-40D9-4F2C-833A-A20BD8B3C247}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78637F8C-E682-496B-9C53-6518E122A851}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78637F8C-E682-496B-9C53-6518E122A851}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78637F8C-E682-496B-9C53-6518E122A851}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78637F8C-E682-496B-9C53-6518E122A851}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
