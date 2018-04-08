@@ -64,8 +64,8 @@ module WorldTests =
         | None ->
             Assert.Fail "Should exist"
         | Some w ->
-            let dims = World.getDimensions w
-            let data = World.getWorld w
+            let dims = World.dimensions w
+            let data = World.cellStatuses w
             let cells =
                 data
                 |> Map.toList

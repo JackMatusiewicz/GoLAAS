@@ -16,8 +16,8 @@ type World = private {
 [<CompilationRepresentation (CompilationRepresentationFlags.ModuleSuffix)>]
 module World =
 
-    let getWorld world = world.World
-    let getDimensions world = world.Dimensions
+    let cellStatuses world = world.World
+    let dimensions world = world.Dimensions
 
     ///World goes from [0 -> width - 1] and [0 -> height - 1]
     let make ((w,h) : (Width * Height)) (liveCells : Set<Coordinate>) : World option =
