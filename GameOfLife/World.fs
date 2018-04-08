@@ -72,18 +72,16 @@ module World =
         |> Set.ofList
 
     let private tickCell (world : World) (c : Coordinate) : Coordinate * CellStatus =
-        let cellAliveLogic (c : Coordinate) (neighbours : CellStatus seq) =
-            neighbours
-            |> Seq.filter ((=) Alive)
-            |> Seq.length
-            |> (fun count -> count = 2 || count = 3)
-            |> (fun alive -> if alive then Alive else Dead)
 
-        let cellDeadLogic (c : Coordinate) (neighbours : CellStatus seq) =
+        let getOutcome
+            (pred : int -> bool)
+            (c : Coordinate)
+            (neighbours : CellStatus seq)
+            =
             neighbours
             |> Seq.filter ((=) Alive)
             |> Seq.length
-            |> (fun count -> count = 3)
+            |> pred
             |> (fun alive -> if alive then Alive else Dead)
 
         let neighbours =
@@ -94,9 +92,9 @@ module World =
         match cellStatus world c with
         | None -> failwith "This should never happen"
         | (Some Alive) ->
-            cellAliveLogic c neighbours
+            getOutcome (fun count -> count = 2 || count = 3) c neighbours
         | (Some Dead) ->
-            cellDeadLogic c neighbours
+            getOutcome ((=) 3) c neighbours
         |> (fun state -> c,state)
 
     let tick (world : World) : World =
